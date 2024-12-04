@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <windows.h>
 #include <winhttp.h>
+#pragma comment(lib, "winhttp.lib")
 
 #pragma section(".tls1", read)
 __declspec(allocate(".tls1")) const char RC4_KEY[] = "680d150e-23fe-4216-9bbb-7c1c101dda72";
