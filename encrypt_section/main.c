@@ -30,7 +30,7 @@ void print_help(void) {
 }
 
 int parse_argv(int argc, char *argv[], char **binary, char **exec_section, char **data_section, char **header_file, char **flat_file, char **key_section) {
-   for (size_t i=0; i<argc; ++i) {
+   for (size_t i=1; i<argc; ++i) {
       if (strncmp(argv[i], "-h", 2) == 0) {
          print_help();
          return 0;
