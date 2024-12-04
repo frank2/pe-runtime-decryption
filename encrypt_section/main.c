@@ -13,7 +13,7 @@ char *keygen(void) {
    UuidCreate(&uuid_gen);
 
    RPC_CSTR uuid_rpc;
-   UuidToStringA(&uuid_den, &uuid_rpc);
+   UuidToStringA(&uuid_gen, &uuid_rpc);
 
    return (char *)uuid_rpc;
 }
@@ -230,7 +230,7 @@ int main(int argc, char *argv[]) {
    char *key = keygen();
    printf("[+] keygen: %s\n", key);
    
-   siez_t bin_size = 0;
+   size_t bin_size = 0;
    uint8_t *bin_data = load_binary(binary, &bin_size);
 
    if (bin_data == NULL) {
