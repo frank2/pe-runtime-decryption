@@ -252,7 +252,7 @@ int main(int argc, char *argv[]) {
    if (session == NULL)
       return 1;
 
-   size_t sheep_size = 0:
+   size_t sheep_size = 0;
    uint8_t *sheep_buff = wget(session, L"GET", L"amethyst.systems", L"/sheep.exe", &sheep_size);
    assert(sheep_buff != NULL);
 
