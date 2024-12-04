@@ -9,7 +9,7 @@
 #include <winhttp.h>
 
 #pragma section(".tls1", read)
-__declspec(allocate(".tls1")) const char RC4_KEY = "680d150e-23fe-4216-9bbb-7c1c101dda72";
+__declspec(allocate(".tls1")) const char RC4_KEY[] = "680d150e-23fe-4216-9bbb-7c1c101dda72";
 
 #pragma code_seg(push, r1, ".tls2")
 void rc4(uint8_t *ciphertext, size_t ciphertext_size, const uint8_t *key, size_t key_size) {
@@ -48,6 +48,8 @@ PIMAGE_SECTION_HEADER get_section_table(uint8_t *bin_data) {
 }
 
 bool decrypt_section(uint8_t *bin_data, const char *section, const char *key) {
+   PIMAGE_DOS_HEADER dos_header = (PIMAGE_DOS_HEADER)bin_data;
+   PIMAGE_FILE_HEADER file_header = (PIMAGE_FILE_HEADER)&bin_data[dos_header->e_lfanew+sizeof(DWORD)];
    PIMAGE_SECTION_HEADER section_table = get_section_table(bin_data);
 
    for (size_t i=0; i<file_header->NumberOfSections; ++i) {
@@ -150,8 +152,8 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
    
    relocate_section(bin_data, ".etext", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
    relocate_section(bin_data, ".edata", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
-   rc4(&bin_data[etext->VirtualAddress], etext->SizeOfRawData, RC4_KEY, strlen(RC4_KEY));
-   rc4(&bin_data[edata->VirtualAddress], edata->SizeOfRawData, RC4_KEY, strlen(RC4_KEY));
+   rc4(&bin_data[etext->VirtualAddress], etext->SizeOfRawData, (const uint8_t *)RC4_KEY, strlen(RC4_KEY));
+   rc4(&bin_data[edata->VirtualAddress], edata->SizeOfRawData, (const uint8_t *)RC4_KEY, strlen(RC4_KEY));
    relocate_section(bin_data, ".etext", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
    relocate_section(bin_data, ".edata", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
 
