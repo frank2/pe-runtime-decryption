@@ -137,9 +137,9 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
    edata = NULL;
 
    for (size_t i=0; i<nt_headers->FileHeader.NumberOfSections; ++i) {
-      if (memcmp(&section_table[i].Name[0], ".etext", strlen(".etext")) == 0)
+      if (memcmp(&section_table[i].Name[0], ".encc", strlen(".encc")) == 0)
          etext = &section_table[i];
-      else if (memcmp(&section_table[i].Name[0], ".edata", strlen(".edata")) == 0)
+      else if (memcmp(&section_table[i].Name[0], ".encd", strlen(".encd")) == 0)
          edata = &section_table[i];
    }
 
@@ -151,12 +151,12 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
    
    IMAGE_NT_HEADERS64 original_headers = original_nt_headers((HMODULE)dll_handle);
    
-   relocate_section(bin_data, ".etext", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
-   relocate_section(bin_data, ".edata", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
+   relocate_section(bin_data, ".encc", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
+   relocate_section(bin_data, ".encd", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
    rc4(&bin_data[etext->VirtualAddress], etext->SizeOfRawData, (const uint8_t *)RC4_KEY, strlen(RC4_KEY));
    rc4(&bin_data[edata->VirtualAddress], edata->SizeOfRawData, (const uint8_t *)RC4_KEY, strlen(RC4_KEY));
-   relocate_section(bin_data, ".etext", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
-   relocate_section(bin_data, ".edata", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
+   relocate_section(bin_data, ".encc", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
+   relocate_section(bin_data, ".encd", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
 
    DWORD new_etext, new_edata;
    assert(VirtualProtect(&bin_data[etext->VirtualAddress], etext->Misc.VirtualSize, old_etext, &new_etext));
@@ -173,7 +173,7 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
 const PIMAGE_TLS_CALLBACK decrypt_callback = decrypt_sheep;
 #pragma const_seg(pop, c1)
 
-#pragma code_seg(push, r1, ".etext")
+#pragma code_seg(push, r1, ".encc")
 #pragma data_seg(push, d1, ".encd")
 HINTERNET init_winhttp(void) {
    return WinHttpOpen(L"Amethyst Labs/1.0",

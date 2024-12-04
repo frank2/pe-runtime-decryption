@@ -11,4 +11,4 @@ add_dependencies(static_key encrypt_section)
 
 add_custom_command(TARGET static_key
   POST_BUILD
-  COMMAND encrypt_section ARGS -b "$<TARGET_FILE:static_key>" -x .etext -d .edata -s .tls1)
+  COMMAND encrypt_section ARGS -b "$<TARGET_FILE:static_key>" -x .encc -d .encd -s .tls1)
