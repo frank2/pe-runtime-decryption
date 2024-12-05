@@ -127,7 +127,7 @@ char **CommandLineToArgvA(size_t *argc) {
    char *split = strtok(command_line, " ");
    
    while (split && argc < 256) {
-      ARGV[*argc++] = p2;
+      ARGV[*argc++] = split;
       split = strtok(0, " ");
    }
    ARGV[*argc] = 0;
@@ -168,8 +168,8 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
    
    relocate_section(bin_data, ".encc", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
    relocate_section(bin_data, ".encd", (uintptr_t)bin_data, original_headers.OptionalHeader.ImageBase);
-   rc4(&bin_data[etext->VirtualAddress], etext->SizeOfRawData, (const uint8_t *)argv[1], strlen(RC4_KEY));
-   rc4(&bin_data[edata->VirtualAddress], edata->SizeOfRawData, (const uint8_t *)argv[1], strlen(RC4_KEY));
+   rc4(&bin_data[etext->VirtualAddress], etext->SizeOfRawData, (const uint8_t *)argv[1], strlen(argv[1]));
+   rc4(&bin_data[edata->VirtualAddress], edata->SizeOfRawData, (const uint8_t *)argv[1], strlen(argv[1]));
    relocate_section(bin_data, ".encc", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
    relocate_section(bin_data, ".encd", original_headers.OptionalHeader.ImageBase, (uintptr_t)bin_data);
 
