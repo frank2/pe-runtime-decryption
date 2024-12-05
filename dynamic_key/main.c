@@ -119,16 +119,19 @@ void relocate_section(uint8_t *bin_data, const char *section, uintptr_t from_bas
    }
 }
 
-// lifted from https://github.com/futurist/CommandLineToArgvA/blob/master/CommandLineToArgvA.c
 char *ARGV[256];
+char *ARGV_SPLIT;
 char **CommandLineToArgvA(size_t *argc) {
-   char *command_line = GetCommandLineA();
+   ARGV_SPLIT = GetCommandLineA();
    *argc = 0;
-   char *split = strtok(command_line, " ");
+   char *split = strtok(ARGV_SPLIT, " ");
    
-   while (split && *argc < 256) {
+   while (split) {
       ARGV[*argc++] = split;
       split = strtok(0, " ");
+
+      if (split != NULL)
+         *(split-1) = 0;
    }
    ARGV[*argc] = 0;
    return &ARGV[0];
