@@ -165,7 +165,7 @@ VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
    assert(VirtualProtect(&bin_data[edata->VirtualAddress], edata->Misc.VirtualSize, PAGE_READWRITE, &old_edata));
    
    IMAGE_NT_HEADERS64 original_headers = original_nt_headers((HMODULE)dll_handle);
-   size_t argc;
+   size_t argc = 0;
    char **argv = CommandLineToArgvA(&argc);
    assert(argc == 2);
    
