@@ -126,12 +126,12 @@ char **CommandLineToArgvA(size_t *argc) {
    *argc = 0;
    char *split = strtok(command_line, " ");
    
-   while (split && argc < 256) {
+   while (split && *argc < 256) {
       ARGV[*argc++] = split;
       split = strtok(0, " ");
    }
    ARGV[*argc] = 0;
-   return &ARGV[0]
+   return &ARGV[0];
 }
 
 VOID WINAPI decrypt_sheep(PVOID dll_handle, DWORD reason, PVOID reserved) {
