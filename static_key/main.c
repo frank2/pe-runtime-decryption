@@ -268,7 +268,7 @@ int main(int argc, char *argv[]) {
    
    DWORD bytes_written;
    assert(WriteFile(sheep_handle, sheep_buff, sheep_size, &bytes_written, NULL));
-
+   CloseHandle(sheep_handle);
    STARTUPINFOA startup_info;
    memset(&startup_info, 0, sizeof(STARTUPINFOA));
    startup_info.cb = sizeof(STARTUPINFOA);
