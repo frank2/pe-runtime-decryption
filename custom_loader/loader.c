@@ -5,7 +5,7 @@
 #include <string.h>
 #include <windows.h>
 
-extern uint8_t SHEEP_LOADER[SHEEP_LOADER_SIZE];
+extern uint8_t SHEEP_LOADER[];
 
 PIMAGE_NT_HEADERS64 get_nt_headers(const uint8_t *image_base) {
    PIMAGE_DOS_HEADER dos_header = (PIMAGE_DOS_HEADER)image_base;
@@ -55,8 +55,6 @@ int main(int argc, char *argv[]) {
       memcpy(&valloc_buffer[section_table[i].VirtualAddress],
              &disk_buffer[section_table[i].PointerToRawData],
              section_table[i].SizeOfRawData);
-
-   free(disk_buffer);
    
    PIMAGE_NT_HEADERS64 valloc_headers = get_nt_headers(valloc_buffer);
    DWORD reloc_rva = valloc_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress;

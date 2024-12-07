@@ -26,5 +26,3 @@ add_custom_command(TARGET custom_loader
   COMMAND binobj ARGS SHEEP_LOADER 1 "$<TARGET_FILE:custom_loader_payload>" "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/sheep_loader.obj")
 
 target_link_libraries(custom_loader "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/sheep_loader.obj")
-file(SIZE "$<TARGET_FILE:custom_loader_payload>" CUSTOM_LOADER_PAYLOAD_SIZE)
-target_compile_definitions(custom_loader PUBLIC SHEEP_LOADER_SIZE=${CUSTOM_LOADER_PAYLOAD_SIZE})

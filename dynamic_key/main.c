@@ -128,7 +128,7 @@ char **CommandLineToArgvA(size_t *argc) {
    
    while (split) {
       ARGV[(*argc)++] = split;
-      split = strtok(0, " ");
+      split = strtok(NULL, " ");
 
       if (split != NULL)
          *(split-1) = 0;
